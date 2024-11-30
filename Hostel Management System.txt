@@ -1,0 +1,103 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+public class HostelBookingSystem extends JFrame implements ActionListener {
+    // GUI Components
+    private JLabel titleLabel;
+    private JLabel nameLabel;
+    private JTextField nameTextField;
+    private JLabel roomLabel;
+    private JTextField roomTextField;
+    private JLabel dateLabel;
+    private JTextField dateTextField;
+    private JButton bookButton;
+    private JButton viewBookingsButton;
+    private JTextArea outputArea;
+
+    // List to store booking details
+    private ArrayList<String> bookings;
+
+    public HostelBookingSystem() {
+        // Frame settings
+        setTitle("College Hostel Booking System");
+        setSize(400, 400);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(new FlowLayout());
+
+        // Initialize booking list
+        bookings = new ArrayList<>();
+
+        // Initialize components
+        titleLabel = new JLabel("College Hostel Booking System");
+        nameLabel = new JLabel("Student Name:");
+        nameTextField = new JTextField(20);
+        roomLabel = new JLabel("Room Number:");
+        roomTextField = new JTextField(10);
+        dateLabel = new JLabel("Booking Date:");
+        dateTextField = new JTextField(10);
+        bookButton = new JButton("Book Room");
+        viewBookingsButton = new JButton("View Bookings");
+        outputArea = new JTextArea(10, 30);
+        outputArea.setEditable(false);
+
+        // Add action listeners to buttons
+        bookButton.addActionListener(this);
+        viewBookingsButton.addActionListener(this);
+
+        // Add components to the frame
+        add(titleLabel);
+        add(nameLabel);
+        add(nameTextField);
+        add(roomLabel);
+        add(roomTextField);
+        add(dateLabel);
+        add(dateTextField);
+        add(bookButton);
+        add(viewBookingsButton);
+        add(new JScrollPane(outputArea));
+
+        // Set frame visibility
+        setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == bookButton) {
+            String studentName = nameTextField.getText();
+            String roomNumber = roomTextField.getText();
+            String bookingDate = dateTextField.getText();
+
+            // Simple validation
+            if (studentName.isEmpty() || roomNumber.isEmpty() || bookingDate.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill all fields", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Add booking to the list
+            bookings.add("Student: " + studentName + " | Room: " + roomNumber + " | Date: " + bookingDate);
+            JOptionPane.showMessageDialog(this, "Room Booked Successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            // Clear input fields
+            nameTextField.setText("");
+            roomTextField.setText("");
+            dateTextField.setText("");
+        } else if (e.getSource() == viewBookingsButton) {
+            outputArea.setText(""); // Clear previous output
+            if (bookings.isEmpty()) {
+                outputArea.append("No bookings available.\n");
+            } else {
+                outputArea.append("List of Bookings:\n");
+                for (String booking : bookings) {
+                    outputArea.append(booking + "\n");
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new HostelBookingSystem();
+    }
+}
